@@ -1,44 +1,55 @@
 import streamlit as st
 
-# --- YOUR DATA ---
-my_project_files = {
-    "JD_Data_Analyst.txt": "Skills: Python, SQL, Power BI, Excel. Location: Pune.",
-    "JD_Web_Developer.txt": "Skills: HTML, CSS, JavaScript, Flask. Role: Backend.",
-    "JD_Process_Executive.txt": "Skills: Operations, Management, Reporting, Excel.",
-    "JD_Python_Dev.txt": "Skills: Python, Django, APIs, PostgreSQL.",
-    "JD_Machine_Learning.txt": "Skills: Python, Scikit-learn, Statistics, Math."
-}
-
-required_skills = ["python", "sql", "excel", "communication", "management"]
-
-# --- THE DESIGN ---
-st.set_page_config(page_title="Resume Matcher", layout="wide")
-st.title("🚀 ATS Resume Ranking System")
+st.set_page_config(page_title="Dynamic ATS Matcher", layout="wide")
+st.title("🚀 Dynamic ATS Resume Matcher")
 st.markdown("---")
 
-# --- THE INPUT ---
-st.write("### Test Candidate Output")
-st.write("Paste the candidate's resume text below to run the matching logic.")
+# --- INTERACTIVE DASHBOARD DESIGN ---
+# Creating two columns to put Job details on the left, Resume on the right
+col1, col2 = st.columns(2)
 
-# Instead of reading local files, we let the user paste the text!
-resume_text = st.text_area("Candidate Resume Text:", value="Name: Babu. Skills: Python, SQL, Technical Process, Excel.")
+with col1:
+    st.write("### 1. Job Requirements")
+    job_title = st.text_input("Job Title:", value="Data Analyst")
+    
+    # This lets you type ANY skills you want on the live website!
+    skills_input = st.text_input("Required Skills (comma separated):", value="python, sql, excel, communication")
+    
+with col2:
+    st.write("### 2. Candidate Info")
+    resume_text = st.text_area("Paste Candidate Resume Text:", height=150, value="Name: Babu. Skills: Python, SQL, Technical Process, Excel.")
 
-if st.button("Calculate Match Score"):
+# --- THE LOGIC ENGINE ---
+# This line turns your comma-separated text into a clean Python list
+required_skills = [skill.strip().lower() for skill in skills_input.split(",")]
+
+# When the user clicks the button, the magic happens
+if st.button("Calculate Match Score", type="primary"):
+    st.markdown("---")
+    st.write(f"### Match Results for: {job_title}")
     
-    st.markdown("### Match Results against Job Descriptions")
+    score = 0
+    matched_skills = []
+    missing_skills = []
     
-    results = []
-    
-    # --- YOUR LOGIC ---
-    for jd_name, jd_text in my_project_files.items():
-        score = 0
-        for skill in required_skills:
-            if skill.lower() in resume_text.lower():
-                score = score + 1
-                
+    # The Loop checking the text
+    for skill in required_skills:
+        if skill in resume_text.lower():
+            score += 1
+            matched_skills.append(skill)
+        else:
+            missing_skills.append(skill)
+            
+    # The Math
+    if len(required_skills) > 0:
         percentage = round((score / len(required_skills)) * 100, 2)
-        results.append({"Job": jd_name.replace(".txt", ""), "Score": f"{percentage}%"})
+    else:
+        percentage = 0
         
-    # --- VISUAL OUTPUT ---
-    sorted_results = sorted(results, key=lambda x: float(x['Score'].strip('%')), reverse=True)
-    st.table(sorted_results)
+    # --- VISUAL RESULTS ---
+    # st.metric creates a beautiful, large number card
+    st.metric(label="Overall Match Score", value=f"{percentage}%")
+    
+    # Show exactly what matched and what didn't
+    st.success(f"**✅ Skills Found:** {', '.join(matched_skills).title()}")
+    st.error(f"**❌ Skills Missing:** {', '.join(missing_skills).title()}")
