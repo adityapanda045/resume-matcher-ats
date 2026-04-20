@@ -8,7 +8,8 @@ genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
 
 def get_gemini_reponse(input_text, prompt):
     model = genai.GenerativeModel('gemini-pro')
-    response = model.generate_content([input_text, prompt])
+    # We are sending this as a single string to avoid "Argument" confusion
+    response = model.generate_content(f"{prompt}\n\n{input_text}")
     return response.text
 
 def input_pdf_text(uploaded_file):
