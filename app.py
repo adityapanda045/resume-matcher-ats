@@ -4,7 +4,7 @@ import PyPDF2 as pdf
 
 # 1. SETUP THE BRAIN (API Key)
 # In a real job, you'd hide this. For now, we are 'Orchestrating' the AI.
-genai.configure(api_key="YOUR_GEMINI_API_KEY")
+genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
 
 def get_gemini_reponse(input_text, prompt):
     model = genai.GenerativeModel('gemini-1.5-flash')
