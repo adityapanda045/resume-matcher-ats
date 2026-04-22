@@ -7,9 +7,10 @@ import PyPDF2 as pdf
 genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
 
 def get_gemini_reponse(input_text, system_prompt):
-    # Using 'gemini-1.5-flash' which is the 2026 standard for speed and reliability
-    genai.GenerativeModel('models/gemini-1.5-flash')
-    # Combining instructions and data into a single clear 'Content' block
+    # This line MUST have 'model =' at the start
+    model = genai.GenerativeModel('gemini-pro')
+    
+    # Now the computer knows what 'model' is
     response = model.generate_content([system_prompt, input_text])
     return response.text
 
