@@ -8,7 +8,7 @@ genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
 
 def get_gemini_reponse(input_text, system_prompt):
     # Using 'gemini-1.5-flash' which is the 2026 standard for speed and reliability
-    model = genai.GenerativeModel('gemini-pro')
+    genai.GenerativeModel('models/gemini-1.5-flash')
     # Combining instructions and data into a single clear 'Content' block
     response = model.generate_content([system_prompt, input_text])
     return response.text
