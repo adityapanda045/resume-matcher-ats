@@ -1,64 +1,30 @@
 import streamlit as st
-import google.generativeai as genai
-import PyPDF2 as pdf
+import sys
 
-# 1. SECURE CONFIGURATION
-# Using the Secret Manager for security
-genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
+st.set_page_config(page_title="Babu's Diagnostic Tool")
 
-def get_gemini_reponse(input_text, system_prompt):
-   model = genai.GenerativeModel('gemini-1.0-pro')
-    response = model.generate_content([system_prompt, input_text])
-    return response.text
+st.title("🛠️ Babu's ATS Diagnostic Mode")
+st.write("If you can see this, the app is **CONNECTED** and working!")
 
-def input_pdf_text(uploaded_file):
-    reader = pdf.PdfReader(uploaded_file)
-    text = ""
-    for page in range(len(reader.pages)):
-        text += str(reader.pages[page].extract_text())
-    return text
+st.header("1. System Information")
+st.write(f"Python Version: {sys.version}")
 
-# --- STREAMLIT UI ---
-st.set_page_config(page_title="Babu's Smart AI-ATS", layout="wide")
-st.title("🤖 Smart AI Resume Analyst (Enterprise Version)")
+st.header("2. Library Check")
+libraries = ["google.generativeai", "pypdf", "plotly", "pandas", "pydantic"]
 
-col1, col2 = st.columns(2)
+for lib in libraries:
+    try:
+        __import__(lib)
+        st.success(f"✅ {lib} is installed and working.")
+    except ImportError as e:
+        st.error(f"❌ {lib} is NOT installed. Error: {e}")
+    except Exception as e:
+        st.warning(f"⚠️ {lib} has a conflict: {e}")
 
-with col1:
-    st.subheader("📋 Job Description")
-    jd_text = st.text_area("Paste the Full Job Description here:", height=200, help="The AI needs this to find the requirements.")
+st.header("3. Secrets Check")
+if "GOOGLE_API_KEY" in st.secrets:
+    st.success("✅ GOOGLE_API_KEY is found in Secrets.")
+else:
+    st.error("❌ GOOGLE_API_KEY is missing from Secrets.")
 
-with col2:
-    st.subheader("📄 Candidate Resume")
-    uploaded_file = st.file_uploader("Upload Resume (PDF format)", type="pdf", help="Please upload a clear PDF file.")
-
-# --- PROFESSIONAL HR PROMPT ---
-input_prompt = """
-You are an expert Technical Recruiter with 15 years of experience at top firms like Infosys and Google. 
-Your task is to analyze the Resume against the Job Description.
-
-Please provide a detailed response in the following structure:
-1. **Match Percentage**: A realistic score (0-100%).
-2. **Top 5 Required Skills**: Extracted from the JD.
-3. **Candidate Gaps**: What is missing or needs improvement?
-4. **Final Verdict**: Should the HR move forward? (2 sentences).
-
-Be professional, objective, and clear.
-"""
-
-if st.button("Run AI Analysis", type="primary"):
-    # VALIDATION: This prevents the 'InvalidArgument' error
-    if uploaded_file is not None and jd_text.strip() != "":
-        with st.spinner('🔍 AI is scanning the resume against JD...'):
-            try:
-                resume_content = input_pdf_text(uploaded_file)
-                # Orchestrating the API call
-                analysis = get_gemini_reponse(resume_content, jd_text + "\n\n" + input_prompt)
-                
-                st.markdown("---")
-                st.write("### 📊 AI Analysis Report")
-                st.info(analysis)
-            except Exception as e:
-                st.error(f"An error occurred: {e}")
-    else:
-        st.error("⚠️ Error: Please ensure you have pasted a Job Description AND uploaded a Resume PDF.")
+st.info("Babu, if all of these are GREEN, then the 'Oh no' was caused by a coding bug. If any are RED, we found the problem!")
