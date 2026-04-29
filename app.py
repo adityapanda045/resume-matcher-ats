@@ -1,9 +1,9 @@
 import streamlit as st
 
 st.set_page_config(
-    page_title="ResumeIQ — Smart ATS Dashboard",
+    page_title="GrailAI — Career Intelligence Platform",
     layout="wide",
-    page_icon="🎯"
+    page_icon="🏆"
 )
 
 from google import genai
@@ -96,20 +96,24 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.title("🎯 ResumeIQ — Smart ATS Dashboard")
-st.caption("AI-Powered Resume Intelligence & Prescriptive Career Analytics | Built by Babu")
+st.title("🏆 GrailAI — Career Intelligence Platform")
+st.caption("AI-Powered Resume Analytics & Prescriptive Interview Prep | The Holy Grail of Career Tools")
 
 with st.sidebar:
+    st.markdown("### 🏆 GrailAI")
+    st.markdown("*The Holy Grail of Career Tools*")
+    st.markdown("---")
     st.markdown("### 👤 Developer")
-    st.write("**Babu**")
+    st.write("**Aditya**")
     st.write("Technical Process Executive")
     st.write("🎯 Target: Data Analytics Role")
     st.markdown("---")
-    st.info("This tool uses NLP + Generative AI to analyze resume-JD fit and generate prescriptive interview insights.")
+    st.info("GrailAI uses NLP + Gemini AI to analyze resume-JD fit, score skill dimensions, and generate prescriptive interview insights.")
     if client:
         st.success("✅ API Connected")
     else:
         st.error("❌ API Not Connected")
+
 
 col1, col2 = st.columns(2)
 with col1:
