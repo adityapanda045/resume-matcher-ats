@@ -82,22 +82,128 @@ Return ONLY a valid JSON object with no other text before or after it:
 """
 
 # ─────────────────────────────────────────
-# UI
+# UI — PREMIUM DARK GLASSMORPHISM THEME
 # ─────────────────────────────────────────
 st.markdown("""
 <style>
-[data-testid="stMetric"] {
-    background: #ffffff;
-    border-radius: 10px;
-    padding: 16px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* ── Global Background ── */
+html, body, [data-testid="stAppViewContainer"] {
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e) !important;
+    font-family: 'Inter', sans-serif !important;
 }
-.stButton button { width: 100%; }
+[data-testid="stHeader"] { background: transparent !important; }
+[data-testid="stSidebar"] {
+    background: rgba(255,255,255,0.05) !important;
+    backdrop-filter: blur(20px);
+    border-right: 1px solid rgba(255,255,255,0.1);
+}
+[data-testid="stSidebar"] * { color: #e0e0e0 !important; }
+
+/* ── Main Title ── */
+.main-title {
+    font-size: 2.8rem;
+    font-weight: 800;
+    background: linear-gradient(90deg, #f72585, #7209b7, #4361ee);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+    margin-bottom: 0.2rem;
+}
+.main-subtitle {
+    text-align: center;
+    color: rgba(255,255,255,0.5);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+    letter-spacing: 1px;
+}
+
+/* ── Glass Cards ── */
+.glass-card {
+    background: rgba(255,255,255,0.07);
+    backdrop-filter: blur(20px);
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+
+/* ── Metrics ── */
+[data-testid="stMetric"] {
+    background: rgba(255,255,255,0.07) !important;
+    backdrop-filter: blur(20px);
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 20px !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+[data-testid="stMetricLabel"] { color: rgba(255,255,255,0.6) !important; font-size: 0.85rem !important; }
+[data-testid="stMetricValue"] { color: #f72585 !important; font-weight: 800 !important; font-size: 2rem !important; }
+
+/* ── Button ── */
+.stButton > button {
+    background: linear-gradient(90deg, #f72585, #7209b7, #4361ee) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 14px 32px !important;
+    font-size: 1.1rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 24px rgba(247,37,133,0.4) !important;
+    transition: all 0.3s ease !important;
+    width: 100%;
+}
+.stButton > button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 32px rgba(247,37,133,0.6) !important;
+}
+
+/* ── Text Areas & Inputs ── */
+.stTextArea textarea, .stFileUploader {
+    background: rgba(255,255,255,0.05) !important;
+    color: white !important;
+    border: 1px solid rgba(255,255,255,0.15) !important;
+    border-radius: 12px !important;
+}
+.stTextArea label, .stFileUploader label { color: rgba(255,255,255,0.7) !important; font-weight: 600 !important; }
+
+/* ── Subheaders ── */
+h2, h3, .stSubheader { color: white !important; }
+
+/* ── Success / Warning / Info boxes ── */
+.stSuccess { background: rgba(0,255,136,0.1) !important; border: 1px solid rgba(0,255,136,0.3) !important; border-radius: 10px !important; }
+.stWarning { background: rgba(255,171,0,0.1) !important; border: 1px solid rgba(255,171,0,0.3) !important; border-radius: 10px !important; }
+.stInfo    { background: rgba(67,97,238,0.15) !important; border: 1px solid rgba(67,97,238,0.4) !important; border-radius: 10px !important; color: white !important; }
+
+/* ── Expander ── */
+.streamlit-expanderHeader {
+    background: rgba(255,255,255,0.07) !important;
+    border-radius: 10px !important;
+    color: white !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+}
+.streamlit-expanderContent {
+    background: rgba(255,255,255,0.04) !important;
+    border: 1px solid rgba(255,255,255,0.08) !important;
+    color: rgba(255,255,255,0.85) !important;
+    border-radius: 0 0 10px 10px !important;
+}
+
+/* ── Divider ── */
+hr { border-color: rgba(255,255,255,0.1) !important; }
+
+/* ── General text ── */
+p, span, div { color: rgba(255,255,255,0.85); }
+.stSpinner > div { border-top-color: #f72585 !important; }
 </style>
 """, unsafe_allow_html=True)
 
-st.title("🏆 GrailAI — Career Intelligence Platform")
-st.caption("AI-Powered Resume Analytics & Prescriptive Interview Prep | The Holy Grail of Career Tools")
+# ── Hero Header ──
+st.markdown('<div class="main-title">🏆 GrailAI</div>', unsafe_allow_html=True)
+st.markdown('<div class="main-subtitle">CAREER INTELLIGENCE PLATFORM &nbsp;|&nbsp; POWERED BY GEMINI AI &nbsp;|&nbsp; BUILT BY ADITYA</div>', unsafe_allow_html=True)
 
 with st.sidebar:
     st.markdown("### 🏆 GrailAI")
