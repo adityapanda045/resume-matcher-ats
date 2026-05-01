@@ -61,14 +61,14 @@ def parse_json(text):
 ANALYSIS_PROMPT = """
 You are a Senior Technical Recruiter. Analyze the resume against the JD below.
 Return ONLY a valid JSON object with no other text before or after it:
-{
+{{
   "match": <integer 0-100>,
-  "scores": {"Technical": <int>, "Domain Knowledge": <int>, "Experience": <int>, "Soft Skills": <int>},
+  "scores": {{"Technical": <int>, "Domain Knowledge": <int>, "Experience": <int>, "Soft Skills": <int>}},
   "skills": [<up to 5 strings of matching skills found>],
   "gaps": [<up to 5 strings of missing skills>],
   "questions": [<exactly 3 interview question strings that target the gaps>],
   "verdict": "<one clear sentence recommendation>"
-}
+}}
 
 JOB DESCRIPTION:
 {jd}
