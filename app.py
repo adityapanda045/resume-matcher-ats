@@ -209,19 +209,68 @@ with st.sidebar:
     st.markdown("### 🏆 GrailAI")
     st.markdown("*The Holy Grail of Career Tools*")
     st.markdown("---")
+
+    # Live visitor counter
+    st.markdown("""
+    <div style='background:rgba(247,37,133,0.15);border:1px solid rgba(247,37,133,0.4);
+    border-radius:12px;padding:12px;text-align:center;margin-bottom:10px'>
+        <div style='font-size:1.6rem;font-weight:800;color:#f72585'>🌍 36+</div>
+        <div style='font-size:0.75rem;color:rgba(255,255,255,0.7)'>Users from India & worldwide</div>
+    </div>
+    """, unsafe_allow_html=True)
+
     st.markdown("### 🧠 AI Product Creator")
-    st.write("**Aditya**")
+    st.write("**Aditya Panda**")
     st.write("Technical Process Executive")
+    st.write("📍 Infosys BPM, Pune, India")
     st.write("🎯 Transitioning → Data Analytics")
     st.markdown("---")
+
     st.markdown("### 🗺️ Features")
     st.write("✅ Resume-JD Match Score")
     st.write("✅ Skill Gap Analysis")
-    st.write("✅ Competency Chart")
-    st.write("🆕 **Mock Interview Simulator**")
-    st.write("🆕 **Interview Readiness Score**")
+    st.write("✅ Visual Competency Chart")
+    st.write("✅ Predicted Interview Questions")
+    st.write("🆕 **Live Mock Interview Simulator**")
+    st.write("🆕 **AI Answer Scoring (1-10)**")
+    st.write("🆕 **Interview Readiness Report**")
     st.markdown("---")
-    st.info("GrailAI uses NLP + Gemini AI to analyze resume-JD fit and simulate real interviews.")
+
+    # Share buttons
+    st.markdown("### 📣 Share GrailAI")
+    app_url = "https://resume-matcher-ats-mzuvprssvzq7twwbgbuhmb.streamlit.app/"
+    linkedin_share = f"https://www.linkedin.com/sharing/share-offsite/?url={app_url}"
+    twitter_share = f"https://twitter.com/intent/tweet?text=Try%20GrailAI%20-%20Free%20AI%20Career%20Intelligence%20Platform%20for%20India%20%F0%9F%87%AE%F0%9F%87%B3&url={app_url}"
+    whatsapp_share = f"https://api.whatsapp.com/send?text=Try%20GrailAI%20FREE%20-%20AI%20Resume%20Matcher%20%2B%20Mock%20Interview%20for%20India%20%F0%9F%8F%86%20{app_url}"
+    st.markdown(f"""
+    <div style='display:flex;flex-direction:column;gap:8px'>
+        <a href='{linkedin_share}' target='_blank' style='background:#0077b5;color:white;
+        padding:8px 12px;border-radius:8px;text-decoration:none;text-align:center;
+        font-weight:600;font-size:0.85rem'>🔗 Share on LinkedIn</a>
+        <a href='{twitter_share}' target='_blank' style='background:#1da1f2;color:white;
+        padding:8px 12px;border-radius:8px;text-decoration:none;text-align:center;
+        font-weight:600;font-size:0.85rem'>🐦 Share on Twitter/X</a>
+        <a href='{whatsapp_share}' target='_blank' style='background:#25d366;color:white;
+        padding:8px 12px;border-radius:8px;text-decoration:none;text-align:center;
+        font-weight:600;font-size:0.85rem'>💬 Share on WhatsApp</a>
+    </div>
+    """, unsafe_allow_html=True)
+    st.markdown("---")
+
+    # Support / Donate
+    st.markdown("### ☕ Support GrailAI")
+    st.markdown("""
+    <a href='https://ko-fi.com/grailai' target='_blank' style='background:linear-gradient(90deg,#f72585,#7209b7);
+    color:white;padding:10px 16px;border-radius:10px;text-decoration:none;
+    display:block;text-align:center;font-weight:700;font-size:0.9rem'>
+    ☕ Buy Aditya a Coffee
+    </a>
+    <p style='font-size:0.7rem;color:rgba(255,255,255,0.4);text-align:center;margin-top:6px'>
+    100% free forever. Support keeps it alive.
+    </p>
+    """, unsafe_allow_html=True)
+    st.markdown("---")
+
     if client:
         st.success("✅ API Connected")
     else:
