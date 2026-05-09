@@ -21,7 +21,25 @@ import pandas as pd
 # ─────────────────────────────────────────
 MAX_INPUT_CHARS = 8000        # Prevent prompt injection via huge inputs
 MAX_PDF_MB = 5                # Reject PDFs > 5 MB
-MAX_ANALYSES_PER_SESSION = 5  # Rate limit: 5 analyses per session
+MAX_ANALYSES_PER_SESSION = 3  # Free tier: 3 analyses per session
+MAX_ANALYSES_PRO = 999        # Pro tier: unlimited
+
+# ─────────────────────────────────────────
+# PRO TIER CONFIG  ($4.99/month base price)
+# ─────────────────────────────────────────
+STRIPE_PAYMENT_LINK = "https://buy.stripe.com/grailai_pro"  # Replace with real Stripe link
+PRO_PRICE = "$4.99/month"
+# Valid Pro license keys (add real keys here after Stripe payments)
+# Format: "GRAIL-XXXX-XXXX-XXXX"
+VALID_PRO_KEYS = set(st.secrets.get("PRO_LICENSE_KEYS", "").split(",")) - {""}  if hasattr(st, 'secrets') else set()
+
+def is_pro_user() -> bool:
+    """Returns True if the current session has a valid Pro license key."""
+    key = st.session_state.get("pro_license_key", "").strip().upper()
+    return key in VALID_PRO_KEYS if VALID_PRO_KEYS else False
+
+def get_analysis_limit() -> int:
+    return MAX_ANALYSES_PRO if is_pro_user() else MAX_ANALYSES_PER_SESSION
 
 PROMPT_GUARD = (
     "[SYSTEM] You are a professional career AI assistant. "
@@ -83,8 +101,12 @@ def check_rate_limit() -> bool:
     if "analysis_count" not in st.session_state:
         st.session_state.analysis_count = 0
         st.session_state.session_start = time.time()
-    if st.session_state.analysis_count >= MAX_ANALYSES_PER_SESSION:
-        st.error(f"⚠️ You have reached the limit of {MAX_ANALYSES_PER_SESSION} analyses per session. Please refresh the page to start a new session.")
+    limit = get_analysis_limit()
+    if st.session_state.analysis_count >= limit:
+        if not is_pro_user():
+            st.error(f"⚠️ Free tier limit reached ({MAX_ANALYSES_PER_SESSION} analyses/session). Upgrade to **Pro** for unlimited analyses!")
+        else:
+            st.error("⚠️ Session limit reached. Please refresh.")
         return False
     return True
 
@@ -148,6 +170,44 @@ Return ONLY a valid JSON object:
   "top_strength": "<their biggest strength shown in the interview>",
   "top_improvement": "<the single most important thing to work on>",
   "confidence_message": "<one encouraging sentence to boost their confidence>"
+}}
+"""
+
+RESUME_REWRITE_PROMPT = """
+You are a professional resume writer with 15 years of experience helping candidates land jobs at top companies.
+Rewrite and improve the resume below to better match the job description.
+Focus on: stronger action verbs, quantified achievements, ATS keyword optimization.
+
+JOB DESCRIPTION:
+{jd}
+
+ORIGINAL RESUME:
+{resume}
+
+Return ONLY a valid JSON object:
+{{
+  "improved_summary": "<a powerful 3-sentence professional summary tailored to the JD>",
+  "key_improvements": ["<improvement 1>", "<improvement 2>", "<improvement 3>", "<improvement 4>", "<improvement 5>"],
+  "ats_keywords_to_add": ["<keyword 1>", "<keyword 2>", "<keyword 3>", "<keyword 4>", "<keyword 5>"],
+  "rewritten_bullets": ["<stronger bullet point 1>", "<stronger bullet point 2>", "<stronger bullet point 3>"]
+}}
+"""
+
+COVER_LETTER_PROMPT = """
+You are an expert cover letter writer. Write a compelling, personalized cover letter.
+Make it genuine, not generic. Match the candidate's background to the role.
+
+CANDIDATE RESUME SUMMARY:
+{resume}
+
+JOB DESCRIPTION:
+{jd}
+
+Return ONLY a valid JSON object:
+{{
+  "cover_letter": "<full professional cover letter, 3-4 paragraphs, ready to send>",
+  "tone": "<confident/enthusiastic/professional>",
+  "key_selling_points": ["<point 1>", "<point 2>", "<point 3>"]
 }}
 """
 
@@ -272,7 +332,7 @@ with st.sidebar:
     st.markdown("### 💼 Hire Me / Contact")
     st.markdown("""
     <div style='display:flex;flex-direction:column;gap:8px;margin-bottom:12px'>
-        <a href='https://www.linkedin.com/in/aditya-panda' target='_blank'
+        <a href='https://www.linkedin.com/in/aditya-panda-b37437247' target='_blank'
         style='background:#0077b5;color:white;padding:10px 14px;border-radius:10px;
         text-decoration:none;text-align:center;font-weight:700;font-size:0.88rem'>
         🔗 View LinkedIn Profile
@@ -337,6 +397,47 @@ with st.sidebar:
     100% free forever. Support keeps the servers running.
     </p>
     """, unsafe_allow_html=True)
+    st.markdown("---")
+
+    # ── PRO TIER UPGRADE ──
+    st.markdown("---")
+    if is_pro_user():
+        st.markdown("""
+        <div style='background:linear-gradient(135deg,rgba(247,37,133,0.2),rgba(114,9,183,0.2));
+        border:1px solid rgba(247,37,133,0.5);border-radius:14px;padding:14px;text-align:center'>
+            <div style='font-size:1.1rem;font-weight:800;color:#f72585'>⚡ PRO ACTIVE</div>
+            <div style='font-size:0.78rem;color:rgba(255,255,255,0.6);margin-top:4px'>Unlimited analyses · All features unlocked</div>
+        </div>
+        """, unsafe_allow_html=True)
+    else:
+        st.markdown("""
+        <div style='background:linear-gradient(135deg,rgba(247,37,133,0.15),rgba(67,97,238,0.15));
+        border:1px solid rgba(247,37,133,0.4);border-radius:14px;padding:16px;margin-bottom:8px'>
+            <div style='font-size:1rem;font-weight:800;color:#f72585;margin-bottom:6px'>⚡ Upgrade to Pro</div>
+            <div style='font-size:0.8rem;color:rgba(255,255,255,0.75);margin-bottom:10px'>
+                ✅ Unlimited analyses<br>
+                ✅ Resume Rewrite AI<br>
+                ✅ Cover Letter Generator<br>
+                ✅ Priority AI responses
+            </div>
+            <div style='font-size:1.3rem;font-weight:800;color:white;text-align:center;margin-bottom:8px'>$4.99<span style='font-size:0.8rem;color:rgba(255,255,255,0.5)'>/month</span></div>
+        </div>
+        """, unsafe_allow_html=True)
+        st.markdown(f"""<a href='{STRIPE_PAYMENT_LINK}' target='_blank'
+        style='background:linear-gradient(90deg,#f72585,#7209b7);color:white;
+        padding:11px 16px;border-radius:10px;text-decoration:none;
+        display:block;text-align:center;font-weight:700;font-size:0.9rem;margin-bottom:8px'>
+        🚀 Get Pro — {PRO_PRICE}
+        </a>""", unsafe_allow_html=True)
+        pro_key_input = st.text_input("🔑 Enter License Key:", placeholder="GRAIL-XXXX-XXXX-XXXX",
+                                      key="pro_key_field", label_visibility="collapsed")
+        if st.button("✅ Activate Pro", use_container_width=True):
+            if pro_key_input.strip().upper() in VALID_PRO_KEYS:
+                st.session_state.pro_license_key = pro_key_input.strip().upper()
+                st.success("🎉 Pro activated! Refresh to unlock all features.")
+                st.rerun()
+            else:
+                st.error("❌ Invalid key. Purchase Pro to get your license key.")
     st.markdown("---")
 
     # Security notice
@@ -631,6 +732,144 @@ if st.session_state.analysis_data:
             st.session_state.scores_feedback = []
             st.rerun()
 
+    # ── SHAREABLE SCORE CARD (viral mechanic) ──
+    st.markdown("---")
+    match_pct = st.session_state.analysis_data.get('match', 0) if st.session_state.analysis_data else 0
+    share_text = f"My resume scored {match_pct}%25 for this role using GrailAI %F0%9F%8F%86 %E2%80%94 the free AI career tool! Try it: https://resume-matcher-ats-mzuvprssvzq7twwbgbuhmb.streamlit.app/"
+    tw = f"https://twitter.com/intent/tweet?text={share_text}"
+    wa = f"https://api.whatsapp.com/send?text={share_text}"
+    li = "https://www.linkedin.com/sharing/share-offsite/?url=https://resume-matcher-ats-mzuvprssvzq7twwbgbuhmb.streamlit.app/"
+    st.markdown(f"""
+    <div style='background:linear-gradient(135deg,rgba(247,37,133,0.1),rgba(67,97,238,0.1));
+    border:1px solid rgba(247,37,133,0.3);border-radius:16px;padding:20px;text-align:center;margin:12px 0'>
+        <div style='font-size:1.1rem;font-weight:800;color:#f72585;margin-bottom:6px'>📣 Share Your Score!</div>
+        <div style='color:rgba(255,255,255,0.7);font-size:0.88rem;margin-bottom:14px'>
+            Your resume scored <b style='color:#f72585'>{match_pct}%</b> — share it and help your friends prep too!
+        </div>
+        <div style='display:flex;justify-content:center;gap:10px;flex-wrap:wrap'>
+            <a href='{tw}' target='_blank' style='background:#1da1f2;color:white;padding:8px 16px;
+            border-radius:8px;text-decoration:none;font-weight:600;font-size:0.85rem'>🐦 Share on X</a>
+            <a href='{wa}' target='_blank' style='background:#25d366;color:white;padding:8px 16px;
+            border-radius:8px;text-decoration:none;font-weight:600;font-size:0.85rem'>💬 WhatsApp</a>
+            <a href='{li}' target='_blank' style='background:#0077b5;color:white;padding:8px 16px;
+            border-radius:8px;text-decoration:none;font-weight:600;font-size:0.85rem'>🔗 LinkedIn</a>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # ── PRO FEATURES ──
+    st.markdown("---")
+    st.markdown("## ⚡ Pro Features")
+
+    if not is_pro_user():
+        st.markdown(f"""
+        <div style='background:linear-gradient(135deg,rgba(247,37,133,0.15),rgba(67,97,238,0.15));
+        border:2px solid rgba(247,37,133,0.5);border-radius:18px;padding:28px;text-align:center;margin:12px 0'>
+            <div style='font-size:1.5rem;font-weight:800;color:#f72585;margin-bottom:8px'>🚀 Unlock Pro — {PRO_PRICE}</div>
+            <div style='color:rgba(255,255,255,0.8);font-size:0.95rem;margin-bottom:20px'>
+                Upgrade to access <b>Resume Rewrite AI</b> and <b>Cover Letter Generator</b><br>
+                + Unlimited analyses &nbsp;·&nbsp; No session limits &nbsp;·&nbsp; Priority AI
+            </div>
+            <div style='display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-bottom:16px'>
+                <div style='text-align:left;background:rgba(255,255,255,0.07);border-radius:12px;padding:14px 20px'>
+                    <div style='color:#f72585;font-weight:700;margin-bottom:4px'>✍️ Resume Rewrite AI</div>
+                    <div style='color:rgba(255,255,255,0.65);font-size:0.82rem'>AI rewrites your resume to beat ATS<br>+ stronger bullets + keywords</div>
+                </div>
+                <div style='text-align:left;background:rgba(255,255,255,0.07);border-radius:12px;padding:14px 20px'>
+                    <div style='color:#f72585;font-weight:700;margin-bottom:4px'>📝 Cover Letter Generator</div>
+                    <div style='color:rgba(255,255,255,0.65);font-size:0.82rem'>Personalized cover letter in seconds<br>ready to copy and send</div>
+                </div>
+            </div>
+            <a href='{STRIPE_PAYMENT_LINK}' target='_blank'
+            style='background:linear-gradient(90deg,#f72585,#7209b7,#4361ee);color:white;
+            padding:14px 36px;border-radius:12px;text-decoration:none;
+            font-weight:800;font-size:1rem;box-shadow:0 4px 24px rgba(247,37,133,0.4)'>
+            🚀 Get Pro for {PRO_PRICE}
+            </a>
+            <div style='color:rgba(255,255,255,0.4);font-size:0.75rem;margin-top:10px'>
+            Cancel anytime &nbsp;·&nbsp; Secure payment via Stripe &nbsp;·&nbsp; Instant license key by email
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+    else:
+        with st.expander("✍️ Resume Rewrite AI (Pro)", expanded=True):
+            st.markdown("AI will rewrite your resume to beat ATS systems and impress recruiters.")
+            if st.button("🔄 Rewrite My Resume", use_container_width=True, key="rewrite_btn"):
+                if st.session_state.resume_text and st.session_state.jd_text:
+                    with st.spinner("✍️ AI is rewriting your resume..."):
+                        rw_raw = call_gemini(RESUME_REWRITE_PROMPT.format(
+                            jd=sanitize_input(st.session_state.jd_text),
+                            resume=sanitize_input(st.session_state.resume_text)
+                        ))
+                        rw = parse_json(rw_raw) if rw_raw else None
+                    if rw:
+                        st.subheader("📝 Improved Professional Summary")
+                        st.info(rw.get("improved_summary", ""))
+                        col_rw1, col_rw2 = st.columns(2)
+                        with col_rw1:
+                            st.subheader("✅ Key Improvements")
+                            for imp in rw.get("key_improvements", []):
+                                st.success(f"  {imp}")
+                        with col_rw2:
+                            st.subheader("🔑 ATS Keywords to Add")
+                            for kw in rw.get("ats_keywords_to_add", []):
+                                st.warning(f"  {kw}")
+                        st.subheader("💪 Stronger Bullet Points")
+                        for b in rw.get("rewritten_bullets", []):
+                            st.markdown(f"▶ {b}")
+                    else:
+                        st.error("Could not generate rewrite. Try again.")
+                else:
+                    st.warning("Please run a Resume Analysis first.")
+
+        with st.expander("📝 Cover Letter Generator (Pro)", expanded=True):
+            st.markdown("Generate a personalized, ready-to-send cover letter in seconds.")
+            if st.button("📝 Generate Cover Letter", use_container_width=True, key="cover_btn"):
+                if st.session_state.resume_text and st.session_state.jd_text:
+                    with st.spinner("📝 Writing your cover letter..."):
+                        cl_raw = call_gemini(COVER_LETTER_PROMPT.format(
+                            jd=sanitize_input(st.session_state.jd_text),
+                            resume=sanitize_input(st.session_state.resume_text)
+                        ))
+                        cl = parse_json(cl_raw) if cl_raw else None
+                    if cl:
+                        st.subheader("📄 Your Cover Letter")
+                        st.text_area("Copy and paste this into your application:",
+                                     value=cl.get("cover_letter", ""), height=300, key="cl_output")
+                        st.subheader("🎯 Key Selling Points")
+                        for sp in cl.get("key_selling_points", []):
+                            st.success(f"  {sp}")
+                    else:
+                        st.error("Could not generate cover letter. Try again.")
+                else:
+                    st.warning("Please run a Resume Analysis first.")
+
+    # ── AFFILIATE RESOURCES ──
+    st.markdown("---")
+    st.markdown("### 📚 Recommended Resources to Close Your Skill Gaps")
+    st.markdown("""
+    <div style='display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:12px 0'>
+        <a href='https://www.coursera.org/search?query=data+science' target='_blank'
+        style='background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);
+        border-radius:12px;padding:14px;text-decoration:none;display:block'>
+            <div style='color:#f72585;font-weight:700;margin-bottom:4px'>🎓 Coursera</div>
+            <div style='color:rgba(255,255,255,0.6);font-size:0.82rem'>Top courses from Google, IBM &amp; universities. Close your skill gaps fast.</div>
+        </a>
+        <a href='https://www.udemy.com/courses/search/?q=resume+interview' target='_blank'
+        style='background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);
+        border-radius:12px;padding:14px;text-decoration:none;display:block'>
+            <div style='color:#f72585;font-weight:700;margin-bottom:4px'>🎯 Udemy</div>
+            <div style='color:rgba(255,255,255,0.6);font-size:0.82rem'>Affordable courses on every skill. Lifetime access, often $10–15.</div>
+        </a>
+        <a href='https://www.linkedin.com/learning/' target='_blank'
+        style='background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);
+        border-radius:12px;padding:14px;text-decoration:none;display:block'>
+            <div style='color:#f72585;font-weight:700;margin-bottom:4px'>🔗 LinkedIn Learning</div>
+            <div style='color:rgba(255,255,255,0.6);font-size:0.82rem'>Certificates that show up directly on your LinkedIn profile.</div>
+        </a>
+    </div>
+    """, unsafe_allow_html=True)
+
     st.markdown("---")
     # ── CONNECT WITH ADITYA — bottom of page business card ──
     st.markdown("""
@@ -641,7 +880,7 @@ if st.session_state.analysis_data:
             Built by <b>Aditya Panda</b> · AI Product Builder · Open to Remote Roles & Freelance Projects
         </div>
         <div style='display:flex;justify-content:center;gap:12px;flex-wrap:wrap'>
-            <a href='https://www.linkedin.com/in/aditya-panda' target='_blank'
+            <a href='https://www.linkedin.com/in/aditya-panda-b37437247' target='_blank'
             style='background:#0077b5;color:white;padding:10px 20px;border-radius:10px;
             text-decoration:none;font-weight:700;font-size:0.9rem'>🔗 LinkedIn</a>
             <a href='mailto:adityapanda045@gmail.com?subject=GrailAI%20-%20Opportunity'
