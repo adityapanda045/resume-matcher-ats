@@ -21,25 +21,7 @@ import pandas as pd
 # ─────────────────────────────────────────
 MAX_INPUT_CHARS = 8000        # Prevent prompt injection via huge inputs
 MAX_PDF_MB = 5                # Reject PDFs > 5 MB
-MAX_ANALYSES_PER_SESSION = 3  # Free tier: 3 analyses per session
-MAX_ANALYSES_PRO = 999        # Pro tier: unlimited
-
-# ─────────────────────────────────────────
-# PRO TIER CONFIG  ($4.99/month base price)
-# ─────────────────────────────────────────
-STRIPE_PAYMENT_LINK = "https://buy.stripe.com/grailai_pro"  # ⚠️ ACTION NEEDED: Go to stripe.com → Products → Create $4.99/month subscription → Copy Payment Link URL → paste here
-PRO_PRICE = "$4.99/month"
-# Valid Pro license keys (add real keys here after Stripe payments)
-# Format: "GRAIL-XXXX-XXXX-XXXX"
-VALID_PRO_KEYS = set(st.secrets.get("PRO_LICENSE_KEYS", "").split(",")) - {""}  if hasattr(st, 'secrets') else set()
-
-def is_pro_user() -> bool:
-    """Returns True if the current session has a valid Pro license key."""
-    key = st.session_state.get("pro_license_key", "").strip().upper()
-    return key in VALID_PRO_KEYS if VALID_PRO_KEYS else False
-
-def get_analysis_limit() -> int:
-    return MAX_ANALYSES_PRO if is_pro_user() else MAX_ANALYSES_PER_SESSION
+MAX_ANALYSES_PER_SESSION = 10  # 10 free analyses per session
 
 PROMPT_GUARD = (
     "[SYSTEM] You are a professional career AI assistant. "
@@ -101,12 +83,8 @@ def check_rate_limit() -> bool:
     if "analysis_count" not in st.session_state:
         st.session_state.analysis_count = 0
         st.session_state.session_start = time.time()
-    limit = get_analysis_limit()
-    if st.session_state.analysis_count >= limit:
-        if not is_pro_user():
-            st.error(f"⚠️ Free tier limit reached ({MAX_ANALYSES_PER_SESSION} analyses/session). Upgrade to **Pro** for unlimited analyses!")
-        else:
-            st.error("⚠️ Session limit reached. Please refresh.")
+    if st.session_state.analysis_count >= MAX_ANALYSES_PER_SESSION:
+        st.error(f"⚠️ You've used {MAX_ANALYSES_PER_SESSION} analyses this session. Please refresh the page to continue.")
         return False
     return True
 
@@ -399,45 +377,15 @@ with st.sidebar:
     """, unsafe_allow_html=True)
     st.markdown("---")
 
-    # ── PRO TIER UPGRADE ──
+    # ── 100% FREE BADGE ──
     st.markdown("---")
-    if is_pro_user():
-        st.markdown("""
-        <div style='background:linear-gradient(135deg,rgba(247,37,133,0.2),rgba(114,9,183,0.2));
-        border:1px solid rgba(247,37,133,0.5);border-radius:14px;padding:14px;text-align:center'>
-            <div style='font-size:1.1rem;font-weight:800;color:#f72585'>⚡ PRO ACTIVE</div>
-            <div style='font-size:0.78rem;color:rgba(255,255,255,0.6);margin-top:4px'>Unlimited analyses · All features unlocked</div>
-        </div>
-        """, unsafe_allow_html=True)
-    else:
-        st.markdown("""
-        <div style='background:linear-gradient(135deg,rgba(247,37,133,0.15),rgba(67,97,238,0.15));
-        border:1px solid rgba(247,37,133,0.4);border-radius:14px;padding:16px;margin-bottom:8px'>
-            <div style='font-size:1rem;font-weight:800;color:#f72585;margin-bottom:6px'>⚡ Upgrade to Pro</div>
-            <div style='font-size:0.8rem;color:rgba(255,255,255,0.75);margin-bottom:10px'>
-                ✅ Unlimited analyses<br>
-                ✅ Resume Rewrite AI<br>
-                ✅ Cover Letter Generator<br>
-                ✅ Priority AI responses
-            </div>
-            <div style='font-size:1.3rem;font-weight:800;color:white;text-align:center;margin-bottom:8px'>$4.99<span style='font-size:0.8rem;color:rgba(255,255,255,0.5)'>/month</span></div>
-        </div>
-        """, unsafe_allow_html=True)
-        st.markdown(f"""<a href='{STRIPE_PAYMENT_LINK}' target='_blank'
-        style='background:linear-gradient(90deg,#f72585,#7209b7);color:white;
-        padding:11px 16px;border-radius:10px;text-decoration:none;
-        display:block;text-align:center;font-weight:700;font-size:0.9rem;margin-bottom:8px'>
-        🚀 Get Pro — {PRO_PRICE}
-        </a>""", unsafe_allow_html=True)
-        pro_key_input = st.text_input("🔑 Enter License Key:", placeholder="GRAIL-XXXX-XXXX-XXXX",
-                                      key="pro_key_field", label_visibility="collapsed")
-        if st.button("✅ Activate Pro", use_container_width=True):
-            if pro_key_input.strip().upper() in VALID_PRO_KEYS:
-                st.session_state.pro_license_key = pro_key_input.strip().upper()
-                st.success("🎉 Pro activated! Refresh to unlock all features.")
-                st.rerun()
-            else:
-                st.error("❌ Invalid key. Purchase Pro to get your license key.")
+    st.markdown("""
+    <div style='background:linear-gradient(135deg,rgba(0,255,136,0.1),rgba(67,97,238,0.1));
+    border:1px solid rgba(0,255,136,0.3);border-radius:14px;padding:14px;text-align:center'>
+        <div style='font-size:1.1rem;font-weight:800;color:#00ff88'>🎉 100% FREE FOREVER</div>
+        <div style='font-size:0.78rem;color:rgba(255,255,255,0.6);margin-top:4px'>All features unlocked · No login · No credit card</div>
+    </div>
+    """, unsafe_allow_html=True)
     st.markdown("---")
 
     # Security notice
