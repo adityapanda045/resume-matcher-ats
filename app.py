@@ -27,7 +27,7 @@ MAX_ANALYSES_PRO = 999        # Pro tier: unlimited
 # ─────────────────────────────────────────
 # PRO TIER CONFIG  ($4.99/month base price)
 # ─────────────────────────────────────────
-STRIPE_PAYMENT_LINK = "https://buy.stripe.com/grailai_pro"  # Replace with real Stripe link
+STRIPE_PAYMENT_LINK = "https://buy.stripe.com/grailai_pro"  # ⚠️ ACTION NEEDED: Go to stripe.com → Products → Create $4.99/month subscription → Copy Payment Link URL → paste here
 PRO_PRICE = "$4.99/month"
 # Valid Pro license keys (add real keys here after Stripe payments)
 # Format: "GRAIL-XXXX-XXXX-XXXX"
@@ -855,17 +855,23 @@ if st.session_state.analysis_data:
             <div style='color:#f72585;font-weight:700;margin-bottom:4px'>🎓 Coursera</div>
             <div style='color:rgba(255,255,255,0.6);font-size:0.82rem'>Top courses from Google, IBM &amp; universities. Close your skill gaps fast.</div>
         </a>
-        <a href='https://www.udemy.com/courses/search/?q=resume+interview' target='_blank'
+        <a href='https://www.udemy.com/courses/search/?q=data+analyst+python&src=sac&kw=data+analyst' target='_blank'
         style='background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);
         border-radius:12px;padding:14px;text-decoration:none;display:block'>
-            <div style='color:#f72585;font-weight:700;margin-bottom:4px'>🎯 Udemy</div>
-            <div style='color:rgba(255,255,255,0.6);font-size:0.82rem'>Affordable courses on every skill. Lifetime access, often $10–15.</div>
+            <div style='color:#f72585;font-weight:700;margin-bottom:4px'>🎯 Udemy — Data Analyst Courses</div>
+            <div style='color:rgba(255,255,255,0.6);font-size:0.82rem'>Python, SQL, Power BI courses from $10. Lifetime access.</div>
         </a>
-        <a href='https://www.linkedin.com/learning/' target='_blank'
+        <a href='https://www.linkedin.com/learning/topics/data-analysis' target='_blank'
         style='background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);
         border-radius:12px;padding:14px;text-decoration:none;display:block'>
-            <div style='color:#f72585;font-weight:700;margin-bottom:4px'>🔗 LinkedIn Learning</div>
-            <div style='color:rgba(255,255,255,0.6);font-size:0.82rem'>Certificates that show up directly on your LinkedIn profile.</div>
+            <div style='color:#f72585;font-weight:700;margin-bottom:4px'>🔗 LinkedIn Learning — Data Analysis</div>
+            <div style='color:rgba(255,255,255,0.6);font-size:0.82rem'>Certificates that appear directly on your LinkedIn profile.</div>
+        </a>
+        <a href='https://grow.google/intl/en_in/certificates/' target='_blank'
+        style='background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);
+        border-radius:12px;padding:14px;text-decoration:none;display:block'>
+            <div style='color:#f72585;font-weight:700;margin-bottom:4px'>🔵 Google Career Certificates</div>
+            <div style='color:rgba(255,255,255,0.6);font-size:0.82rem'>Google's official Data Analytics certificate. Globally recognized, free trial.</div>
         </a>
     </div>
     """, unsafe_allow_html=True)
