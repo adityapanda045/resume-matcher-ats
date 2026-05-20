@@ -1,4 +1,42 @@
+# ── Streamlit Secrets (NEVER COMMIT) ─────────────────────────────────────────
 .streamlit/secrets.toml
+
+# ── Personal / Sensitive Files (NEVER COMMIT) ────────────────────────────────
+CLAUDE.md
+*.csv
+application_tracker.csv
 test_key.py
+
+# ── Third-party / Cloned Code ─────────────────────────────────────────────────
+ats-pro-smokevicky/
+
+# ── Python ────────────────────────────────────────────────────────────────────
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+venv/
+env/
+.venv/
+.env/
+
+# ── Environment Variables ─────────────────────────────────────────────────────
+.env
+.env.local
+.env.production
+
+# ── IDE / OS ──────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Logs ─────────────────────────────────────────────────────────────────────
+*.log
+logs/
