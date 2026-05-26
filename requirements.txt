@@ -1,6 +1,6 @@
-streamlit
+fastapi==0.115.5
+uvicorn[standard]==0.32.1
 google-genai
 pypdf
-plotly
-pandas
+python-multipart
 pydantic>=2.0
