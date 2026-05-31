@@ -1,7 +1,27 @@
+---
+title: GrailAI Resume Matcher
+emoji: 🏆
+colorFrom: indigo
+colorTo: cyan
+sdk: docker
+app_port: 7860
+pinned: true
+license: mit
+short_description: Free AI resume matcher, skill gap analyzer & mock interview coach
+tags:
+  - fastapi
+  - nlp
+  - resume
+  - ats
+  - gemini
+  - ai
+  - career
+  - interview
+---
+
 # 🏆 GrailAI — AI Resume Checker & Mock Interview Simulator
 
-[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Try_Now_Free-f72585?style=for-the-badge)](https://resume-matcher-ats-mzuvprssvzq7twwbgbuhmb.streamlit.app/)
-[![Built with Streamlit](https://img.shields.io/badge/Built_with-Streamlit-ff4b4b?style=for-the-badge&logo=streamlit)](https://streamlit.io)
+[![Live Demo](https://img.shields.io/badge/🤗_Live_Demo-Hugging_Face_Spaces-orange?style=for-the-badge)](https://huggingface.co/spaces/adityapanda045/resume-matcher-ats)
 [![Powered by Gemini](https://img.shields.io/badge/Powered_by-Google_Gemini_AI-4285F4?style=for-the-badge&logo=google)](https://ai.google.dev)
 [![License: MIT](https://img.shields.io/badge/License-MIT-22c55e?style=for-the-badge)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)

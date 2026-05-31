@@ -17,12 +17,58 @@ import os
 import uvicorn
 
 # ─────────────────────────────────────────
+# VERSION & CHANGELOG
+# ─────────────────────────────────────────
+APP_VERSION = "2.2.0"
+APP_LAST_UPDATED = "2026-05-31"
+
+CHANGELOG = [
+    {
+        "version": "2.2.0",
+        "date": "2026-05-31",
+        "tag": "new",
+        "changes": [
+            "Migrated from Render → Hugging Face Spaces (always-on, no cold starts)",
+            "Added Dockerfile for HF Spaces Docker deployment",
+            "Added /api/version and /api/changelog endpoints",
+            "Added CHANGELOG.md with full version history",
+        ]
+    },
+    {
+        "version": "2.1.0",
+        "date": "2026-05-26",
+        "tag": "improvement",
+        "changes": [
+            "Interactive contact modal replacing broken mailto link",
+            "Resume Bullet Point Optimizer with clipboard copy buttons",
+            "Local scan history saved to browser localStorage",
+            "Toast notification system for user feedback",
+            "PDF export with clean print media stylesheet",
+        ]
+    },
+    {
+        "version": "2.0.0",
+        "date": "2026-05-26",
+        "tag": "major",
+        "changes": [
+            "Complete migration: Streamlit → FastAPI + Vanilla JS SPA",
+            "Mock Interview Coach: 3 AI-targeted questions based on skill gaps",
+            "Resume Rewrite Tool: AI rewrites bullets to match JD keywords",
+            "Cover Letter Generator: personalized letter from resume + JD",
+            "Multi-dimensional radar scoring (Technical, Domain, Experience, Soft Skills)",
+            "Prompt injection guard on all AI endpoints",
+            "Model fallback chain: gemini-2.5-flash → 2.0-flash → 2.0-flash-lite",
+        ]
+    },
+]
+
+# ─────────────────────────────────────────
 # APP SETUP
 # ─────────────────────────────────────────
 app = FastAPI(
     title="GrailAI — AI Career Intelligence Platform",
     description="Free AI resume matcher, skill gap analyzer, and mock interview coach.",
-    version="2.0.0",
+    version=APP_VERSION,
 )
 
 app.add_middleware(
@@ -214,9 +260,23 @@ async def health():
     client = get_client()
     return {
         "status": "ok",
+        "version": APP_VERSION,
+        "last_updated": APP_LAST_UPDATED,
         "model": "gemini-2.5-flash",
         "api_configured": client is not None,
     }
+
+
+@app.get("/api/version")
+async def get_version():
+    """Returns the current app version and last updated date."""
+    return {"version": APP_VERSION, "last_updated": APP_LAST_UPDATED}
+
+
+@app.get("/api/changelog")
+async def get_changelog():
+    """Returns the full changelog for display in the UI."""
+    return {"changelog": CHANGELOG}
 
 
 @app.post("/api/analyze")
