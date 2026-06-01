@@ -1,7 +1,7 @@
 """
 GrailAI — AI Career Intelligence Platform
 FastAPI Backend · Powered by Google Gemini 2.5 Flash
-Built by Aditya Panda (adityapanda045@gmail.com)
+Built by Aditya Panda (officialadi562@gmail.com)
 """
 
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Request

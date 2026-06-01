@@ -62,7 +62,7 @@ ecommerce-website/
 
 - 💼 [LinkedIn](https://www.linkedin.com/in/aditya-panda-b37437247)
 - 🐙 [GitHub](https://github.com/adityapanda045)
-- 📩 [Email](mailto:adityapanda045@gmail.com)
+- 📩 [Email](mailto:officialadi562@gmail.com)
 - 🏆 [GrailAI — My Flagship AI Project](https://resume-matcher-ats-mzuvprssvzq7twwbgbuhmb.streamlit.app/)
 
 ---

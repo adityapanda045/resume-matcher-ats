@@ -315,7 +315,7 @@ with st.sidebar:
         text-decoration:none;text-align:center;font-weight:700;font-size:0.88rem'>
         🔗 View LinkedIn Profile
         </a>
-        <a href='mailto:adityapanda045@gmail.com?subject=GrailAI%20-%20Job%20Opportunity'
+        <a href='mailto:officialadi562@gmail.com?subject=GrailAI%20-%20Job%20Opportunity'
         style='background:linear-gradient(90deg,#4361ee,#7209b7);color:white;
         padding:10px 14px;border-radius:10px;text-decoration:none;
         text-align:center;font-weight:700;font-size:0.88rem'>
@@ -837,7 +837,7 @@ if st.session_state.analysis_data:
             <a href='https://www.linkedin.com/in/aditya-panda-b37437247' target='_blank'
             style='background:#0077b5;color:white;padding:10px 20px;border-radius:10px;
             text-decoration:none;font-weight:700;font-size:0.9rem'>🔗 LinkedIn</a>
-            <a href='mailto:adityapanda045@gmail.com?subject=GrailAI%20-%20Opportunity'
+            <a href='mailto:officialadi562@gmail.com?subject=GrailAI%20-%20Opportunity'
             style='background:linear-gradient(90deg,#f72585,#7209b7);color:white;
             padding:10px 20px;border-radius:10px;text-decoration:none;font-weight:700;font-size:0.9rem'>📩 Email Me</a>
             <a href='https://github.com/adityapanda045' target='_blank'

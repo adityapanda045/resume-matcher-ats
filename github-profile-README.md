@@ -13,7 +13,7 @@
 <!-- Social Badges -->
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/aditya-panda-b37437247)
 [![GitHub](https://img.shields.io/badge/GitHub-Follow-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/adityapanda045)
-[![Email](https://img.shields.io/badge/Email-Contact_Me-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:adityapanda045@gmail.com)
+[![Email](https://img.shields.io/badge/Email-Contact_Me-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:officialadi562@gmail.com)
 [![Ko-fi](https://img.shields.io/badge/Ko--fi-Support-FF5E5B?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/adityapanda045)
 [![Live App](https://img.shields.io/badge/🏆_GrailAI-Try_Free_Now-f72585?style=for-the-badge)](https://resume-matcher-ats-mzuvprssvzq7twwbgbuhmb.streamlit.app/)
 
@@ -135,7 +135,7 @@ aditya = {
 
 If you're hiring for data-driven roles or building AI products, let's talk!
 
-📩 [adityapanda045@gmail.com](mailto:adityapanda045@gmail.com) | 💼 [LinkedIn](https://www.linkedin.com/in/aditya-panda-b37437247)
+📩 [officialadi562@gmail.com](mailto:officialadi562@gmail.com) | 💼 [LinkedIn](https://www.linkedin.com/in/aditya-panda-b37437247)
 
 ---
 

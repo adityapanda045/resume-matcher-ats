@@ -162,7 +162,7 @@ If GrailAI helped you, share it — you'll help thousands of job seekers worldwi
 
 - 💼 Open to remote roles and freelance projects worldwide
 - 🔗 [LinkedIn](https://www.linkedin.com/in/aditya-panda-b37437247)
-- 📩 [Email](mailto:adityapanda045@gmail.com)
+- 📩 [Email](mailto:officialadi562@gmail.com)
 - 💻 [GitHub](https://github.com/adityapanda045)
 - ☕ [Support on Ko-fi](https://ko-fi.com/adityapanda045)
 
